@@ -35,14 +35,9 @@ const QuestionForm = () => {
   const [{},dispatch] = useStateValue();
   const [questions, setQuestions] = useState([
     {
-      questionText: "Which is the capital city of karnataka ? ",
+      questionText: "Question",
       questionType: "radio",
-      options: [
-        { optionText: "Bengaluru" },
-        { optionText: "Belgavi" },
-        { optionText: "Hubli" },
-        { optionText: "Mandya" },
-      ],
+      options: [{ optionText: "Option 1" }],
       answer: false,
       answerKey: "",
       points: 0,
@@ -50,6 +45,7 @@ const QuestionForm = () => {
       required: false,
     },
   ]);
+      
 
   const [documentName, setDocName] = useState("Untitled Document");
   const [documentDescription, setDocDesc] = useState("Add Description");
@@ -223,6 +219,11 @@ const QuestionForm = () => {
   
 
   function commitToDB() {
+
+    dispatch({
+      type: actionTypes.SET_QUESTIONS,
+      questions: questions
+    });
     // axios.post(`http://localhost:9000/add_question/${id}`, 
     axios.patch(`https://form-clone-e5252-default-rtdb.firebaseio.com/add_question/${id}.json`,
     {

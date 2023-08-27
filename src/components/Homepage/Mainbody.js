@@ -23,10 +23,10 @@ const Mainbody = () => {
     // var request = await axios.get("http://localhost:9000/get_all_filenames")
     var request = await axios.get(`https://form-clone-e5252-default-rtdb.firebaseio.com/add_question.json`)
     let filenames = request.data;
+    if(filenames){
     const fileArray = Object.keys(filenames)
-    
     setFiles(fileArray)
-    
+  }
   }
   filenames();
   

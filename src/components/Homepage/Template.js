@@ -7,14 +7,31 @@ import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import blank from "../../images/forms-blank-googlecolors.png";
 import party from "../../images/partyInvite.png";
 import contact from "../../images/contactInformation.png";
-import uuid from "react-uuid";
+
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Template = () => {
   const navigate = useNavigate();
-  function createForm() {
-    const id = uuid();
-    navigate("/form/" + id);
+  async function createForm() {
+    const question_list= [
+      {
+        questionText: "Question",
+        questionType: "radio",
+        options: [{ optionText: "Option 1" }],
+        open: true,
+        required: false,
+      },
+    ]
+    const response = await axios.post(`https://form-clone-e5252-default-rtdb.firebaseio.com/add_question.json`,
+    {
+      document_name: "Untitle_form",
+      doc_desc: "Add Description",
+      questions: question_list,
+    });
+    const firebaseId = response.data.name;
+
+      navigate("/form/" + firebaseId);
   }
   return (
     <div className="template_section">

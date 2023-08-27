@@ -1,5 +1,9 @@
 import { Button, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
+import { utils as XLSXUtils, write as writeXLSX } from 'xlsx';
+import { saveAs } from 'file-saver';
+
+
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import Radio from '@material-ui/core/Radio';
 
@@ -61,6 +65,24 @@ function Userform() {
     answer[k].answer = d.join(",");
     setAnswer(answer);
   }
+  function exportToExcel() {
+    const excelData = answer.map((response) => ({
+      Question: response.question,
+      Answer: response.answer,
+    }));
+  
+    const ws = XLSXUtils.json_to_sheet(excelData);
+    const wb = XLSXUtils.book_new();
+    XLSXUtils.book_append_sheet(wb, ws, 'Form Responses');
+  
+    const blob = new Blob([writeXLSX(wb, { bookType: 'xlsx', type: 'buffer' })], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+  
+    saveAs(blob, 'form_responses.xlsx');
+  }
+  
+  
 
   function submit() {
     answer.map((ele) => {
@@ -73,6 +95,8 @@ function Userform() {
       column: quest,
       answer_data: [post_answer_data],
     });
+
+    exportToExcel();
 
     navigate(`/submitted`);
   }
@@ -173,6 +197,7 @@ function Userform() {
             >
               Submit
             </Button>
+            
           </div>
 
           <div className="user_footer">Google Forms</div>
